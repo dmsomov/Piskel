@@ -21,6 +21,7 @@ export const database = {
   Painting(e) {
     const canvas = document.querySelector('#canvas_dr');
     const ctx = canvas.getContext('2d');
+    const sizePen = state.size_pen;
 
     if (state.IsMouseDown) {
       const x = e.offsetX;
@@ -29,13 +30,13 @@ export const database = {
 
       ctx.fillStyle = myColor;
       ctx.strokeStyle = myColor;
-      ctx.lineWidth = 10;
+      ctx.lineWidth = sizePen * 2;
       ctx.lineTo(x, y);
       ctx.stroke();
       ctx.fill();
 
       ctx.beginPath();
-      ctx.arc(x, y, 5, 0, Math.PI * 2);
+      ctx.arc(x, y, sizePen, 0, Math.PI * 2);
       ctx.fill();
 
       ctx.beginPath();

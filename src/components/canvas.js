@@ -8,6 +8,7 @@ window.onload = () => {
   const currentColor = document.querySelector('#currentColor');
   const secondColor = document.querySelector('#secondColor');
   const toolBox = document.querySelector('.tools-box');
+  const sizeTool = document.querySelector('.size_tool');
 
   [canvas.height, canvas.width] = [CanvasPar.clientHeight, CanvasPar.clientWidth];
   [currentColor.color, secondColor.value] = [state.color.current, state.color.second];
@@ -40,4 +41,12 @@ window.onload = () => {
   toolBox.addEventListener('click', (e) => {
     database.ChangeStatusSelected(e);
   });
+
+  sizeTool.addEventListener('change', (e) => {
+    state.size_pen = e.target.value;
+  });
+  /*window.addEventListener('resize', (e) => {
+    [canvas.height, canvas.width] = [CanvasPar.clientHeight, CanvasPar.clientWidth];
+    //console.log(e);
+  });*/
 };

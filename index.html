@@ -23,6 +23,10 @@
     </header>
     <div class="content">
       <div class="tools_container">
+        <div class="input_size_tool">
+          <div class="">Pen Size</div>
+          <input type="range" min="5" max="25" step="5" class="size_tool">
+        </div>
         <div class="tools">
           <ul class="tools-box" id="tools-box">
             <li class="tool-icon tool-icon-pen selected" data-set="pen"></li>
@@ -60,7 +64,7 @@
           </div>
         </div>
         <div class="canvas">
-          <canvas id="canvas_dr"></canvas>
+          <canvas id="canvas_dr" class="canvas"></canvas>
         </div>
       </div>
       <div class="functional">

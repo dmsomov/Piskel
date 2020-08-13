@@ -17,6 +17,7 @@ export const state = {
       status: 'false',
     },
   },
+  size_pen: 5,
   color: {
     current: 'black',
     second: 'white',
