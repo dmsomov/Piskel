@@ -18,7 +18,7 @@ export const database = {
     this.ChangeStatusTools(e.target.dataset.set);
   },
 
-  Painting(e) {
+  Painting(e, status) {
     const canvas = document.querySelector('#canvas_dr');
     const ctx = canvas.getContext('2d');
     const sizePen = state.size_pen;
@@ -27,6 +27,10 @@ export const database = {
       const x = e.offsetX;
       const y = e.offsetY;
       const myColor = state.color.active;
+
+      if (status) {
+        ctx.globalCompositeOperation = 'destination-out';
+      } 
 
       ctx.fillStyle = myColor;
       ctx.strokeStyle = myColor;
@@ -41,15 +45,16 @@ export const database = {
 
       ctx.beginPath();
       ctx.moveTo(x, y);
+
+      if (status) {
+        ctx.globalCompositeOperation = 'source-over';
+      } 
     }
   },
   CopyImage() {
     const canvas = document.querySelector('#canvas_dr');
     const ctx = canvas.getContext('2d');
     const image = ctx.getImageData(0, 0, canvas.width, canvas.height);
-  },
-  Eraser() {
-    if (state.IsMouseDown) { console.log('eraser'); }
   },
   Bucket() {
     if (state.IsMouseDown) { console.log('bucket'); }

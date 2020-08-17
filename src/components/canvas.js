@@ -23,8 +23,8 @@ window.onload = () => {
   });
 
   canvas.addEventListener('mousemove', (e) => {
-    if (state.tools.pen.status === 'true') { database.Painting(e); }
-    if (state.tools.eraser.status === 'true') { database.Eraser(); }
+    if (state.tools.pen.status === 'true') { database.Painting(e, false); }
+    if (state.tools.eraser.status === 'true') { database.Painting(e, true); }
     if (state.tools.bucket.status === 'true') { database.Bucket(); }
     if (state.tools.colorswap.status === 'true') { database.Colorswap(); }
     if (state.tools.stroke.status === 'true') { database.Stroke(); }
