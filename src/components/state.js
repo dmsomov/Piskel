@@ -2,27 +2,28 @@ export const state = {
   IsMouseDown: false,
   tools: {
     pen: {
-      status: 'true',
+      status: "true",
     },
     eraser: {
-      status: 'false',
+      status: "false",
     },
     bucket: {
-      status: 'false',
+      status: "false",
     },
     colorswap: {
-      status: 'false',
+      status: "false",
     },
     stroke: {
-      status: 'false',
+      status: "false",
     },
   },
-  size_pen: 5,
+  sizeCell: 5,
+  sizePen: 5,
   color: {
-    current: 'black',
-    second: 'white',
-    active: 'black',
+    current: "#000000",
+    second: "#ffffff",
+    active: "#000000",
   },
 };
 
-export default 'state';
+export default "state";
