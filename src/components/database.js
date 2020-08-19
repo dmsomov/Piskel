@@ -1,3 +1,5 @@
+/* eslint-disable max-len */
+/* eslint-disable no-console */
 import { state } from "./state";
 
 export const database = {
@@ -60,7 +62,6 @@ export const database = {
       const { sizePen } = state;
       const { sizeCell } = state;
       const myColor = state.color.active;
-      // [canvas.height, canvas.width] = [CanvasPar.clientHeight, CanvasPar.clientWidth];
       const coordX = e.offsetX;
       const coordY = e.offsetY;
       const gridSize = Math.floor(canvas.height / sizeCell);
@@ -71,11 +72,9 @@ export const database = {
 
       for (let i = 0; i < gridSize; i += 1) {
         for (let j = 0; j < gridSize; j += 1) {
-        // eslint-disable-next-line max-len
           if (coordX > (j * +sizeCell) && coordX < ((j + 1) * +sizeCell) && coordY > (i * +sizeCell) && coordY < ((i + 1)) * +sizeCell) {
             ctx.fillStyle = myColor;
-            // eslint-disable-next-line max-len
-            ctx.fillRect((j * +sizeCell) - sizePen / 2, (i * +sizeCell) - sizePen / 2, +sizePen, +sizePen);
+            ctx.fillRect((j * +sizeCell), (i * +sizeCell), +sizePen, +sizePen);
           }
         }
       }
@@ -86,33 +85,43 @@ export const database = {
     }
   },
 
-  Eraser(e) {
+  Eraser() { },
+  Bucket() {
+    const canvas = document.querySelector("#canvas_dr");
+    const ctx = canvas.getContext("2d");
+    const { sizeCell } = state;
+    const pxlCol = ctx.getImageData(5, 5, 1, 1);
+
     if (state.IsMouseDown) {
-      const canvas = document.querySelector("#canvas_dr");
-      const ctx = canvas.getContext("2d");
-      const { sizePen } = state;
-      const { sizeCell } = state;
-      const myColor = state.color.active;
-      // [canvas.height, canvas.width] = [CanvasPar.clientHeight, CanvasPar.clientWidth];
-      const coordX = e.offsetX;
-      const coordY = e.offsetY;
+      console.log(Array.from(pxlCol.data));
+    }
+  },
 
-      /* const pxlX = "128";
-      const pxlY = "128"; */
+  Colorswap(e) {
+    const canvas = document.querySelector("#canvas_dr");
+    const ctx = canvas.getContext("2d");
+    const X = e.offsetX;
+    const Y = e.offsetY;
+    const { sizeCell } = state;
+    const currentColor = state.color.active;
+    let ArrayToRGB = Array.from(ctx.getImageData(X, Y, 1, 1).data);
+    ArrayToRGB = ArrayToRGB.filter((i, ind) => ind < 3).join(", ");
 
-      const gridSize = Math.floor(canvas.height / sizeCell);
-
-      for (let i = 0; i < gridSize; i += 1) {
-        for (let j = 0; j < gridSize; j += 1) {
-        // eslint-disable-next-line max-len
-          if (coordX > (j * +sizeCell) && coordX < ((j + 1) * +sizeCell) && coordY > (i * +sizeCell) && coordY < ((i + 1)) * +sizeCell) {
-            ctx.fillStyle = myColor;
-            // eslint-disable-next-line max-len
-            ctx.fillRect((j * +sizeCell) - sizePen / 2, (i * +sizeCell) - sizePen / 2, +sizePen, +sizePen);
+    if (state.IsMouseDown) {
+      for (let i = 0; i < 32; i += 1) {
+        for (let j = 0; j < 32; j += 1) {
+          let colorCell = ctx.getImageData(i * sizeCell + 1, j * sizeCell + 1, 1, 1).data;
+          colorCell = colorCell.filter((a, ind) => ind < 3).join(", ");
+          if (colorCell === ArrayToRGB) {
+            this.DrawRect(i, j, currentColor);
           }
         }
       }
     }
+  },
+
+  Stroke() {
+    if (state.IsMouseDown) { console.log("stroke"); }
   },
 
   CopyImage() {
@@ -120,17 +129,7 @@ export const database = {
     const ctx = canvas.getContext("2d");
     const image = ctx.getImageData(0, 0, canvas.width, canvas.height);
   },
-  Bucket() {
-    if (state.IsMouseDown) { console.log("bucket"); }
-  },
-  Colorswap() {
-    if (state.IsMouseDown) {
-      console.log("colorswap");
-    }
-  },
-  Stroke() {
-    if (state.IsMouseDown) { console.log("stroke"); }
-  },
+
   ChangeStatusTools(e) {
     const obj = state.tools;
 
@@ -140,6 +139,23 @@ export const database = {
         obj[key].status = (e === key) ? "true" : "false";
       }
     }
+  },
+  HexToRGB(col) {
+    const m = col.slice(1).match(/.{2}/g);
+
+    m[0] = parseInt(m[0], 16);
+    m[1] = parseInt(m[1], 16);
+    m[2] = parseInt(m[2], 16);
+
+    return m.join(", ");
+  },
+  DrawRect(X, Y, color) {
+    const canvas = document.querySelector("#canvas_dr");
+    const ctx = canvas.getContext("2d");
+    const { sizeCell } = state;
+
+    ctx.fillStyle = color;
+    ctx.fillRect((X * +sizeCell), (Y * +sizeCell), +sizeCell, +sizeCell);
   },
 };
 

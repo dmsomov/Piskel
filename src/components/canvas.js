@@ -28,8 +28,8 @@ window.onload = () => {
   canvas.addEventListener("mousemove", (e) => {
     if (state.tools.pen.status === "true") { database.Painting(e, false); }
     if (state.tools.eraser.status === "true") { database.Painting(e, true); }
-    if (state.tools.bucket.status === "true") { database.Eraser(e); }
-    if (state.tools.colorswap.status === "true") { database.Colorswap(); }
+    if (state.tools.bucket.status === "true") { database.Bucket(e); }
+    if (state.tools.colorswap.status === "true") { database.Colorswap(e); }
     if (state.tools.stroke.status === "true") { database.Stroke(); }
   });
 
