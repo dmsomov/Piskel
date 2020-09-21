@@ -86,14 +86,25 @@ export const database = {
   },
 
   Eraser() { },
-  Bucket() {
-    const canvas = document.querySelector("#canvas_dr");
-    const ctx = canvas.getContext("2d");
-    const { sizeCell } = state;
-    const pxlCol = ctx.getImageData(5, 5, 1, 1);
-
+  Bucket(e) {
     if (state.IsMouseDown) {
-      console.log(Array.from(pxlCol.data));
+      const canvas = document.querySelector("#canvas_dr");
+      const ctx = canvas.getContext("2d");
+      const { sizeCell } = state;
+      const X = e.offsetX;
+      const Y = e.offsetY;
+      const coordX = Math.floor(X / sizeCell);
+      const coordY = Math.floor(Y / sizeCell);
+      const currentPenColor = this.HexToRGB(state.color.active);
+      // console.log("Цвет заливки - ", currentPenColor);
+      let ArrayToRGB = Array.from(ctx.getImageData(X, Y, 1, 1).data);
+      ArrayToRGB = ArrayToRGB.filter((i, ind) => ind < 3).join(", ");
+
+      this.BucketCheckCells(coordX, coordY, ArrayToRGB, currentPenColor);
+
+      // console.log("Цвет текущей ячейки - ", ArrayToRGB);
+      // console.log(coordX, coordY, sizeCell);
+      // this.DrawRect(coordX, coordY, currentPenColor);
     }
   },
 
@@ -128,6 +139,7 @@ export const database = {
     const canvas = document.querySelector("#canvas_dr");
     const ctx = canvas.getContext("2d");
     const image = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    console.log(image);
   },
 
   ChangeStatusTools(e) {
@@ -156,6 +168,26 @@ export const database = {
 
     ctx.fillStyle = color;
     ctx.fillRect((X * +sizeCell), (Y * +sizeCell), +sizeCell, +sizeCell);
+  },
+  CheckToColor(X, Y, color1, color2) {
+    const canvas = document.querySelector("#canvas_dr");
+    const ctx = canvas.getContext("2d");
+    const { sizeCell } = state;
+    const colorCurrent = color1;
+    const colorReplace = color2;
+    let colorCell = ctx.getImageData(X * sizeCell + 1, Y * sizeCell + 1, 1, 1).data;
+    colorCell = colorCell.filter((a, ind) => ind < 3).join(", ");
+    if (X >= 0 && X <= 32 && Y >= 0 && Y <= 32 && colorCell === colorCurrent && colorCell !== colorReplace) {
+      this.DrawRect(X, Y, `rgb(${colorReplace})`);
+      return this.BucketCheckCells(X, Y, colorCurrent, colorReplace);
+      // console.log(colorCell);
+    }
+  },
+  BucketCheckCells(X, Y, colorC, colorR) {
+    this.CheckToColor(X - 1, Y, colorC, colorR);
+    this.CheckToColor(X + 1, Y, colorC, colorR);
+    this.CheckToColor(X, Y - 1, colorC, colorR);
+    this.CheckToColor(X, Y + 1, colorC, colorR);
   },
 };
 

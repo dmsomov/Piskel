@@ -30,7 +30,7 @@ window.onload = () => {
     if (state.tools.eraser.status === "true") { database.Painting(e, true); }
     if (state.tools.bucket.status === "true") { database.Bucket(e); }
     if (state.tools.colorswap.status === "true") { database.Colorswap(e); }
-    if (state.tools.stroke.status === "true") { database.Stroke(); }
+    if (state.tools.stroke.status === "true") { database.CopyImage(); }
   });
 
   currentColor.addEventListener("change", (e) => {
