@@ -189,6 +189,16 @@ export const database = {
     this.CheckToColor(X, Y - 1, colorC, colorR);
     this.CheckToColor(X, Y + 1, colorC, colorR);
   },
+  RemoveFrame(e) {
+    const previewList = document.querySelector(".preview_list");
+    if (e.target.parentNode !== previewList.childNodes[1] && e.target.classList) {
+      e.target.parentNode.remove();
+    }
+  },
+  DuplicateFrame(e) {
+    const cloneFrame = e.target.parentNode.cloneNode(true);
+    e.target.parentNode.after(cloneFrame);
+  },
 };
 
 export default { database };
