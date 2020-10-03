@@ -199,6 +199,11 @@ export const database = {
     const cloneFrame = e.target.parentNode.cloneNode(true);
     e.target.parentNode.after(cloneFrame);
   },
+  RenderFrame() {
+    const liFrame = document.querySelectorAll(".toggled");
+    Array.from(liFrame).forEach((el, ind) => { el.innerHTML = ind + 1});
+  },
+
 };
 
 export default { database };

@@ -56,17 +56,20 @@ window.onload = () => {
     const newFr = new Frame();
     newFr.newFrame();
     newFr.say();
+    database.RenderFrame();
   });
 
   previewList.addEventListener("click", (e) => {
     const classLi = Array.from(e.target.classList);
-    // console.dir(Array.from(classLi).indexOf('delete_frame'));
-    console.log(classLi);
+    const el = e.target;
     if (classLi.indexOf("delete_frame") >= 0) {
       database.RemoveFrame(e);
+      database.RenderFrame();
     } else if (classLi.indexOf("duplicate_frame") >= 0) {
       database.DuplicateFrame(e);
+      database.RenderFrame();
     } else if (classLi.indexOf("dnd_frame") >= 0) {
+      database.RenderFrame();
       console.log("dnd");
     }
   });
