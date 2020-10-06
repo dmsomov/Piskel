@@ -16,9 +16,6 @@ export class Frame {
     <button class="tile_overlay tile_count toggled">1</button> `;
     this.previewList.append(this.newElementLi);
   }
-
-  // previewList = document.querySelector('.preview_list');
-  say() {}
 }
 
 export default { Frame };

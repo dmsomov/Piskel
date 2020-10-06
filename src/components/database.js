@@ -201,9 +201,50 @@ export const database = {
   },
   RenderFrame() {
     const liFrame = document.querySelectorAll(".toggled");
-    Array.from(liFrame).forEach((el, ind) => { el.innerHTML = ind + 1});
+    Array.from(liFrame).forEach((i, ind) => { i.innerHTML = ind + 1; });
   },
+  DragAndDrop(e) {
+    const elLi = e.target.parentNode;
+    elLi.addEventListener("mousemove", this.MoveAt(e));
+    // elLi.style.position = "absolute";
+    // elLi.style.zIndex = 1000;
+    // console.log(elLi.style);
+  },
+  MoveAt() {
+    const previewList = document.querySelector(".preview_list");
+    const previewTiles = previewList.querySelectorAll(".preview_tile");
+    previewTiles.forEach((item) => {
+      item.draggable = true;
+    });
 
+    previewList.addEventListener("dragstart", (el) => {
+      el.target.classList.add("selected");
+    });
+    previewList.addEventListener("dragend", (el) => {
+      el.target.classList.remove("selected");
+    });
+    previewList.addEventListener("dragover", (el) => {
+      el.preventDefault();
+
+      const activeElement = previewList.querySelector(".selected");
+      const currentElement = el.target;
+      const isMoveable = activeElement !== currentElement && currentElement.classList.contains("preview_tile");
+
+      if (!isMoveable) {
+        return;
+      }
+
+      const nextElement = (currentElement === activeElement.nextElementSibling)
+        ? currentElement.nextElementSibling
+        : currentElement;
+
+      previewList.insertBefore(activeElement, nextElement);
+    });
+
+    console.log(previewList);
+    console.log(previewTiles);
+    // elLi.style.top = e.clientY;
+  },
 };
 
 export default { database };

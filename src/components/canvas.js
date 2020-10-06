@@ -52,16 +52,15 @@ window.onload = () => {
     state.sizePen = state.sizeCell * e.target.value;
   });
 
-  addFrame.addEventListener("click", (e) => {
+  addFrame.addEventListener("click", () => {
     const newFr = new Frame();
     newFr.newFrame();
-    newFr.say();
+    // newFr.say();
     database.RenderFrame();
   });
 
   previewList.addEventListener("click", (e) => {
     const classLi = Array.from(e.target.classList);
-    const el = e.target;
     if (classLi.indexOf("delete_frame") >= 0) {
       database.RemoveFrame(e);
       database.RenderFrame();
@@ -69,8 +68,8 @@ window.onload = () => {
       database.DuplicateFrame(e);
       database.RenderFrame();
     } else if (classLi.indexOf("dnd_frame") >= 0) {
-      database.RenderFrame();
-      console.log("dnd");
+      // database.RenderFrame();
+      database.DragAndDrop(e);
     }
   });
   /* window.addEventListener('resize', (e) => {

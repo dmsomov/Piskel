@@ -20,6 +20,7 @@ header > .logo {
 }
 
 .head_btn > button {
+  font-size: 12px;
   height: 30px;
   width: 100px;
   background-color: #ffff00;
@@ -350,6 +351,17 @@ ul, li  {
   border: 2px solid rgb(138, 123, 123) ;
 }
 
+.red {
+  background-color: red;
+}
+
+.green {
+  background-color: green;
+}
+
+.blue {
+  background-color: blue;
+}
 //#canvas_dr {
   //border: 3px solid black;
 //}
