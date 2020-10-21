@@ -83,6 +83,7 @@ export const database = {
         ctx.globalCompositeOperation = "source-over";
       }
     }
+    this.CopyImage();
   },
 
   Eraser() { },
@@ -124,7 +125,7 @@ export const database = {
           let colorCell = ctx.getImageData(i * sizeCell + 1, j * sizeCell + 1, 1, 1).data;
           colorCell = colorCell.filter((a, ind) => ind < 3).join(", ");
           if (colorCell === ArrayToRGB) {
-            this.DrawRect(i, j, currentColor);
+            setTimeout(this.DrawRect(i, j, currentColor), 0);
           }
         }
       }
@@ -132,14 +133,27 @@ export const database = {
   },
 
   Stroke() {
-    if (state.IsMouseDown) { console.log("stroke"); }
+    if (state.IsMouseDown) {
+      console.log("stroke");
+    }
+    // this.CopyImage();
   },
 
   CopyImage() {
-    const canvas = document.querySelector("#canvas_dr");
-    const ctx = canvas.getContext("2d");
-    const image = ctx.getImageData(0, 0, canvas.width, canvas.height);
-    console.log(image);
+    if (state.IsMouseDown) {
+      const canvas = document.querySelector("#canvas_dr");
+      const canvCollection = document.querySelectorAll(".frameCanv");
+
+      // eslint-disable-next-line no-restricted-syntax
+      for (const canv of canvCollection) {
+        const context = canv.getContext("2d");
+        if (canv.closest(".selected")) {
+          canv.width = 90;
+          canv.height = 90;
+          context.drawImage(canvas, 0, 0, canv.width, canv.height);
+        }
+      }
+    }
   },
 
   ChangeStatusTools(e) {
@@ -201,34 +215,32 @@ export const database = {
   },
   RenderFrame() {
     const liFrame = document.querySelectorAll(".toggled");
-    Array.from(liFrame).forEach((i, ind) => { i.innerHTML = ind + 1; });
+    Array.from(liFrame).forEach((el, ind) => { const elem = el; elem.innerHTML = ind + 1; });
   },
   DragAndDrop(e) {
     const elLi = e.target.parentNode;
     elLi.addEventListener("mousemove", this.MoveAt(e));
-    // elLi.style.position = "absolute";
-    // elLi.style.zIndex = 1000;
-    // console.log(elLi.style);
   },
   MoveAt() {
     const previewList = document.querySelector(".preview_list");
     const previewTiles = previewList.querySelectorAll(".preview_tile");
-    previewTiles.forEach((item) => {
+    previewTiles.forEach((i) => {
+      const item = i;
       item.draggable = true;
     });
 
     previewList.addEventListener("dragstart", (el) => {
       el.target.classList.add("selected");
     });
-    previewList.addEventListener("dragend", (el) => {
-      el.target.classList.remove("selected");
+    previewList.addEventListener("dragend", () => {
+      // el.target.classList.remove("selected");
     });
     previewList.addEventListener("dragover", (el) => {
       el.preventDefault();
 
       const activeElement = previewList.querySelector(".selected");
       const currentElement = el.target;
-      const isMoveable = activeElement !== currentElement && currentElement.classList.contains("preview_tile");
+      const isMoveable = activeElement !== currentElement && currentElement.classList.contains("preview_tile", "selected");
 
       if (!isMoveable) {
         return;
@@ -237,13 +249,28 @@ export const database = {
       const nextElement = (currentElement === activeElement.nextElementSibling)
         ? currentElement.nextElementSibling
         : currentElement;
-
       previewList.insertBefore(activeElement, nextElement);
     });
+  },
+  ChangeSelectedFrame() {
+    const currentSelectedFrame = document.querySelector(".preview_list > li.selected");
+    const listUl = document.querySelector(".preview_list");
 
-    console.log(previewList);
-    console.log(previewTiles);
-    // elLi.style.top = e.clientY;
+    currentSelectedFrame.classList.remove("selected");
+    listUl.lastChild.classList.add("selected");
+  },
+  AddClassSelected(e) {
+    const currentFrameSel = document.querySelector(".preview_list > li.selected");
+    console.log(currentFrameSel);
+    console.dir(e.target.tagName);
+    if (currentFrameSel != null && e.target.tagName !== "UL") {
+      currentFrameSel.classList.remove("selected");
+      e.target.closest(".preview_tile").classList.add("selected");
+    }
+
+    // e.target.classList.add("selected");
+    // console.dir();
+    // console.dir(e.target);
   },
 };
 

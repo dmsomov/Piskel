@@ -13,6 +13,9 @@ window.onload = () => {
   const sizeCell = Math.floor(CanvasPar.clientHeight / 32);
   const addFrame = document.querySelector(".add_frames_action");
   const previewList = document.querySelector(".preview_list");
+  const canv = document.querySelector("#canv");
+  canv.height = 90;
+  canv.width = 90;
 
   [canvas.height, canvas.width] = [sizeCell * 32, sizeCell * 32];
   [currentColor.color, secondColor.value] = [state.color.current, state.color.second];
@@ -29,7 +32,7 @@ window.onload = () => {
   });
 
   canvas.addEventListener("mousemove", (e) => {
-    if (state.tools.pen.status === "true") { database.Painting(e, false); }
+    if (state.tools.pen.status === "true") { setTimeout(database.Painting(e, false), 0); }
     if (state.tools.eraser.status === "true") { database.Painting(e, true); }
     if (state.tools.bucket.status === "true") { database.Bucket(e); }
     if (state.tools.colorswap.status === "true") { database.Colorswap(e); }
@@ -52,25 +55,28 @@ window.onload = () => {
     state.sizePen = state.sizeCell * e.target.value;
   });
 
-  addFrame.addEventListener("click", () => {
+  addFrame.addEventListener("click", (e) => {
     const newFr = new Frame();
     newFr.newFrame();
-    // newFr.say();
     database.RenderFrame();
+    database.ChangeSelectedFrame(e);
   });
-
   previewList.addEventListener("click", (e) => {
     const classLi = Array.from(e.target.classList);
     if (classLi.indexOf("delete_frame") >= 0) {
       database.RemoveFrame(e);
-      database.RenderFrame();
     } else if (classLi.indexOf("duplicate_frame") >= 0) {
       database.DuplicateFrame(e);
-      database.RenderFrame();
     } else if (classLi.indexOf("dnd_frame") >= 0) {
-      // database.RenderFrame();
       database.DragAndDrop(e);
+      e.target.closest(".preview_tile").classList.add("selected");
+      // database.AddClassSelected(e);
     }
+    database.RenderFrame();
+    database.AddClassSelected(e);
+    // alert(e.target.tagName);
+    // console.log(e.target);
+    // console.log(e.currentTarget);
   });
   /* window.addEventListener('resize', (e) => {
     [canvas.height, canvas.width] = [CanvasPar.clientHeight, CanvasPar.clientWidth];
