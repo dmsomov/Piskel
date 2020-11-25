@@ -24,6 +24,7 @@ export const state = {
     second: "#ffffff",
     active: "#000000",
   },
+  frames: [],
 };
 
 export default "state";

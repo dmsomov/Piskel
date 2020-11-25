@@ -65,7 +65,8 @@ export const database = {
       const coordX = e.offsetX;
       const coordY = e.offsetY;
       const gridSize = Math.floor(canvas.height / sizeCell);
-
+      console.log(coordX, coordY);
+      console.log(e);
       if (status) {
         ctx.globalCompositeOperation = "destination-out";
       }
@@ -205,17 +206,26 @@ export const database = {
   },
   RemoveFrame(e) {
     const previewList = document.querySelector(".preview_list");
+
     if (e.target.parentNode !== previewList.childNodes[1] && e.target.classList) {
       e.target.parentNode.remove();
+    }
+    if (e.target.parentNode.classList.contains("selected")) {
+      previewList.children[0].classList.add("selected");
     }
   },
   DuplicateFrame(e) {
     const cloneFrame = e.target.parentNode.cloneNode(true);
     e.target.parentNode.after(cloneFrame);
+    e.target.closest(".preview_tile").classList.remove("selected");
+    console.dir(e.target.closest(".preview_tile"));
   },
   RenderFrame() {
     const liFrame = document.querySelectorAll(".toggled");
-    Array.from(liFrame).forEach((el, ind) => { const elem = el; elem.innerHTML = ind + 1; });
+    Array.from(liFrame).forEach((el, ind) => {
+      const elem = el;
+      elem.innerHTML = ind + 1;
+    });
   },
   DragAndDrop(e) {
     const elLi = e.target.parentNode;
@@ -260,17 +270,35 @@ export const database = {
     listUl.lastChild.classList.add("selected");
   },
   AddClassSelected(e) {
-    const currentFrameSel = document.querySelector(".preview_list > li.selected");
-    console.log(currentFrameSel);
-    console.dir(e.target.tagName);
-    if (currentFrameSel != null && e.target.tagName !== "UL") {
-      currentFrameSel.classList.remove("selected");
-      e.target.closest(".preview_tile").classList.add("selected");
+    const currentFramesSelected = document.querySelectorAll(".preview_list > li.selected");
+    const newFrameSel = e.target.closest(".preview_tile");
+    console.dir(newFrameSel.classList.contains("selected"));
+    if (!newFrameSel.classList.contains("selected")) {
+      Array.from(currentFramesSelected).forEach((currentFrameSel) => {
+        if (currentFrameSel != null && e.target.tagName !== "UL") {
+          currentFrameSel.classList.remove("selected");
+        }
+        newFrameSel.classList.add("selected");
+      });
     }
+  },
+  AddCanvToState() {
+    const frames = document.querySelectorAll(".frameCanv");
+    state.frames = [];
+    Array.from(frames).forEach((el) => {
+      const context = el.getContext("2d");
+      console.log(context.getImageData(0, 0, 90, 90));
+      state.frames.push(context);
+    });
+    console.log(state.frames);
+  },
+  ClearContent() {
+    const canv = document.querySelector("#canvas_dr");
+    const ctx = canv.getContext("2d");
+    const canvW = canv.width;
+    const canvH = canv.height;
 
-    // e.target.classList.add("selected");
-    // console.dir();
-    // console.dir(e.target);
+    ctx.clearRect(0, 0, canvW, canvH);
   },
 };
 

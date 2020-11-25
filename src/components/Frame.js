@@ -1,3 +1,5 @@
+import { database } from "./database";
+
 export class Frame {
   constructor() {
     this.previewList = document.querySelector(".preview_list");
@@ -15,6 +17,7 @@ export class Frame {
     <div class="tile_overlay dnd_frame icon_frame_dragndrop"></div>
     <button class="tile_overlay tile_count toggled">1</button> `;
     this.previewList.append(this.newElementLi);
+    database.ClearContent();
   }
 }
 

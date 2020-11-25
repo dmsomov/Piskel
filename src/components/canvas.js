@@ -25,6 +25,8 @@ window.onload = () => {
   canvas.addEventListener("mouseup", () => {
     state.IsMouseDown = false;
     ctx.beginPath();
+    database.AddCanvToState();
+    // database.ClearContent();
   });
 
   canvas.addEventListener("mousedown", () => {
@@ -70,13 +72,10 @@ window.onload = () => {
     } else if (classLi.indexOf("dnd_frame") >= 0) {
       database.DragAndDrop(e);
       e.target.closest(".preview_tile").classList.add("selected");
-      // database.AddClassSelected(e);
+    } else if (classLi.indexOf("frameCanv") >= 0) {
+      database.AddClassSelected(e);
     }
     database.RenderFrame();
-    database.AddClassSelected(e);
-    // alert(e.target.tagName);
-    // console.log(e.target);
-    // console.log(e.currentTarget);
   });
   /* window.addEventListener('resize', (e) => {
     [canvas.height, canvas.width] = [CanvasPar.clientHeight, CanvasPar.clientWidth];
