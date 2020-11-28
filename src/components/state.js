@@ -25,6 +25,7 @@ export const state = {
     active: "#000000",
   },
   frames: [],
+  curfr: [],
 };
 
 export default "state";

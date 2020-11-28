@@ -14,6 +14,7 @@ window.onload = () => {
   const addFrame = document.querySelector(".add_frames_action");
   const previewList = document.querySelector(".preview_list");
   const canv = document.querySelector("#canv");
+  const butcanv = document.querySelector("#butcanv");
   canv.height = 90;
   canv.width = 90;
 
@@ -38,7 +39,7 @@ window.onload = () => {
     if (state.tools.eraser.status === "true") { database.Painting(e, true); }
     if (state.tools.bucket.status === "true") { database.Bucket(e); }
     if (state.tools.colorswap.status === "true") { database.Colorswap(e); }
-    if (state.tools.stroke.status === "true") { database.CopyImage(); }
+    if (state.tools.stroke.status === "true") { }
   });
 
   currentColor.addEventListener("change", (e) => {
@@ -74,9 +75,17 @@ window.onload = () => {
       e.target.closest(".preview_tile").classList.add("selected");
     } else if (classLi.indexOf("frameCanv") >= 0) {
       database.AddClassSelected(e);
+      database.RenderFrameToCanv(e);
     }
     database.RenderFrame();
   });
+  butcanv.addEventListener("click", () => {
+    setInterval(() => {
+      database.Animation();
+    }, (state.frames.length + 1) * 2000);
+  });
+
+  // setInterval( database.Animation(), 10000);
   /* window.addEventListener('resize', (e) => {
     [canvas.height, canvas.width] = [CanvasPar.clientHeight, CanvasPar.clientWidth];
     //console.log(e);

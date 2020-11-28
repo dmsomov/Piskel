@@ -287,10 +287,9 @@ export const database = {
     state.frames = [];
     Array.from(frames).forEach((el) => {
       const context = el.getContext("2d");
-      console.log(context.getImageData(0, 0, 90, 90));
-      state.frames.push(context);
+      context.getImageData(0, 0, 90, 90);
+      state.frames.push(el);
     });
-    console.log(state.frames);
   },
   ClearContent() {
     const canv = document.querySelector("#canvas_dr");
@@ -299,6 +298,38 @@ export const database = {
     const canvH = canv.height;
 
     ctx.clearRect(0, 0, canvW, canvH);
+  },
+  RenderFrameToCanv(e) {
+    const canvas = document.querySelector("#canvas_dr");
+    const ctx = canvas.getContext("2d");
+    const curFrame = e.target;
+
+    // console.log(e.target);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(curFrame, 0, 0, canvas.width, canvas.height);
+
+    // for (const canv of canvCollection) {
+    //   const context = canv.getContext("2d");
+    //   if (canv.closest(".selected")) {
+    //     canv.width = 90;
+    //     canv.height = 90;
+    //     context.drawImage(canvas, 0, 0, canv.width, canv.height);
+    //   }
+    // }
+  },
+  Animation() {
+    const canvAnim = document.querySelector("#canvAnim");
+    const ctxAn = canvAnim.getContext("2d");
+    console.log(state.frames);
+    // ctxAn.drawImage(state.frames[0], 0, 0, 150, 150);
+    if (state.frames.length > 0) {
+      state.frames.forEach((el, ind) => {
+        setTimeout(() => {
+          ctxAn.clearRect(0, 0, canvAnim.width, canvAnim.height);
+          ctxAn.drawImage(el, 0, 0, canvAnim.width, canvAnim.height);
+        }, 1000 * (ind + 1));
+      });
+    }
   },
 };
 
